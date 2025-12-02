@@ -12,7 +12,7 @@ import ForgotPasswordForm from './components/ForgotPasswordForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import Success from './components/Success';
 import LoginForm from './components/LoginForm';
-import { getUser } from '@/lib/utils';
+import { getUser, handleApiError, handleApiSuccess } from '@/lib/utils';
 
 const Login = () => {
   const router = useRouter();
@@ -39,7 +39,7 @@ const Login = () => {
   return (
     <div className="m-auto flex h-screen max-w-[300px] flex-col items-center justify-center gap-8">
       <Image
-        src="/images/logo.webp"
+        src="/icons/logo.svg"
         alt="logo"
         className="h-12 w-[71px]"
         width={0}
@@ -76,7 +76,14 @@ const Login = () => {
                   password: data.password,
                 },
                 {
-                  onSuccess: () => router.replace('/home'),
+                  onSuccess: (data) => {
+                    handleApiSuccess({
+                      message: data.message,
+                      fallback: 'Login Successful',
+                    });
+                    router.replace('/home');
+                  },
+                  onError: (error) => handleApiError({ error }),
                 },
               );
             }}
@@ -87,7 +94,13 @@ const Login = () => {
           <ForgotPasswordForm
             onSubmit={(data) => {
               setEmail(data.email);
-              requestPasswordResetQuery.mutate(data.email);
+              requestPasswordResetQuery.mutate(data.email, {
+                onSuccess: () =>
+                  handleApiSuccess({
+                    message: 'Password reset link sent to your email',
+                  }),
+                onError: (error) => handleApiError({ error }),
+              });
             }}
             isLoading={requestPasswordResetQuery.isPending}
           />
@@ -102,9 +115,13 @@ const Login = () => {
                 },
                 {
                   onSuccess: () => {
+                    handleApiSuccess({
+                      message: 'Password reset successfully',
+                    });
                     router.replace('/');
                     setStage('success');
                   },
+                  onError: (error) => handleApiError({ error }),
                 },
               );
             }}

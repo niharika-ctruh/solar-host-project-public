@@ -1,4 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 @import 'tailwindcss';
+
+:root {
+  box-sizing: border-box;
+  font-family: 'DM Sans', sans-serif;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  @apply hidden;
+}
 
 @theme {
   /* fonts */
@@ -59,6 +73,7 @@
   --color-light-foreground: #09090b;
   --color-light-muted-foreground: #71717a;
   --color-background-dark-500: #0e101a;
+  --color-background-dark-100: #333a68;
 
   /* semantics */
   --color-yellow-900: #ffc100;
@@ -84,8 +99,39 @@
 
   /* Gray */
   --color-gray-200: #eaecf0;
+  --color-gray-400: #98a2b3;
   --color-gray-500: #667085;
+  --color-gray-600: #475467;
 
   /* Purple */
   --color-purple-25: #fafaff;
+}
+
+.custom-datepicker-popper {
+  z-index: 50;
+}
+
+.custom-datepicker-calendar {
+  border-radius: 0.5rem;
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+.react-datepicker-popper {
+  margin-left: 2rem;
+}
+
+/* Ensure the date picker input has proper full width */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container {
+  width: 100%;
+}
+
+.react-datepicker__input-container input {
+  width: 100% !important;
+  border: 1px solid var(--color-background-400) !important;
+  padding-left: 40px;
 }

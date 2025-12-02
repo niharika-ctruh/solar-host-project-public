@@ -1,12 +1,12 @@
-const Visits = () => {
+const VisitDetail = () => {
   return (
     <div className="flex h-full flex-col">
       <div className="flex min-h-20 items-center justify-between border border-[red] px-4">
-        Visits Header
+        Visit Detail Header
       </div>
-      <div className="grow border border-[green]">Visits Body</div>
+      <div className="grow border border-[green]">Visit Detail Body</div>
     </div>
   );
 };
 
-export default Visits;
+export default VisitDetail;

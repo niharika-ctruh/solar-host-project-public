@@ -1,67 +1,21 @@
 'use client';
+import { REQUEST_STATUS_CONFIG } from '@/data';
+import useCountdown from '@/hooks/useCountdown';
 import { TRequestDetailData } from '@/lib/types';
-import { Calendar, Clock, CloseCircle, TickCircle } from 'iconsax-reactjs';
-import { useEffect, useMemo, useState } from 'react';
-
-const STATUS_CONFIG = {
-  waiting: {
-    label: 'Waiting',
-    bg: 'bg-yellow-400',
-    text: 'text-yellow-500',
-    icon: <Clock className="text-background-50 h-4 w-4 fill-yellow-500" />,
-  },
-  confirmed: {
-    label: 'Visit Scheduled',
-    bg: 'bg-green-500',
-    text: 'text-green-success-500',
-    icon: (
-      <TickCircle className="fill-green-success-500 text-background-50 h-4 w-4" />
-    ),
-  },
-  cancelled: {
-    label: 'Cancelled',
-    bg: 'bg-red-500',
-    text: 'text-red-900',
-    icon: <CloseCircle className="text-background-50 h-4 w-4 fill-red-900" />,
-  },
-};
+import { formatDate, to12Hour } from '@/lib/utils';
+import { Calendar, Clock } from 'iconsax-reactjs';
+import { useMemo } from 'react';
 
 const RequestDetailCard = ({ data }: { data: TRequestDetailData }) => {
-  const [timeLeft, setTimeLeft] = useState('');
+  const timeLeft = useCountdown({
+    date: data.date,
+    time: data.time,
+    status: data.status,
+  });
   const statusConfig = useMemo(
-    () => STATUS_CONFIG[data.status] ?? STATUS_CONFIG['cancelled'],
+    () => REQUEST_STATUS_CONFIG[data.status],
     [data.status],
   );
-
-  useEffect(() => {
-    if (data.status !== 'waiting') return;
-    if (!data.expiryDate) return;
-
-    const updateTime = () => {
-      if (!data.expiryDate) return;
-
-      const now = Date.now();
-      const expiry = new Date(data.expiryDate).getTime();
-      const diff = expiry - now;
-
-      if (diff <= 0) {
-        setTimeLeft('Expired');
-        return;
-      }
-
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
-    };
-
-    updateTime();
-
-    const interval = setInterval(updateTime, 1000);
-
-    return () => clearInterval(interval);
-  }, [data.status, data.expiryDate]);
 
   return (
     <div className="border-primary-200 font-dm-sans flex flex-col gap-3 rounded-2xl border p-5">
@@ -90,7 +44,7 @@ const RequestDetailCard = ({ data }: { data: TRequestDetailData }) => {
               {statusConfig.label}
             </div>
           </div>
-          {data.status === 'waiting' && data.expiryDate && (
+          {data.status === 'pending' && (
             <div className="flex flex-col items-end text-neutral-500">
               <div className="text-xs leading-[16.8px] font-medium -tracking-[0.48px]">
                 Request expires in
@@ -114,7 +68,7 @@ const RequestDetailCard = ({ data }: { data: TRequestDetailData }) => {
             </div>
           </div>
           <div className="text-sm leading-[19.6px] font-semibold -tracking-[0.56px] text-neutral-500">
-            {data.date}
+            {formatDate(data.date)}
           </div>
         </div>
         <div className="flex flex-col items-center gap-1">
@@ -125,7 +79,7 @@ const RequestDetailCard = ({ data }: { data: TRequestDetailData }) => {
             </div>
           </div>
           <div className="text-sm leading-[19.6px] font-semibold -tracking-[0.56px] text-neutral-500">
-            {data.time}
+            {to12Hour(data.time)}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 'use client';
 import Footer from '@/components/layout/Footer';
 import { getUser } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useEffect } from 'react';
 
 const MainLayout = ({
@@ -10,6 +10,10 @@ const MainLayout = ({
   children: ReactNode;
 }>) => {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const hideFooterRoutes = ['/', '/requests/new'];
+  const shouldHideFooter = hideFooterRoutes.includes(pathname);
 
   useEffect(() => {
     const user = getUser();
@@ -21,10 +25,9 @@ const MainLayout = ({
   }, []);
 
   return (
-    <div className="flex h-full flex-col antialiased">
-      <div className="min-h-20 border border-[red]">Header</div>
-      <div className="grow overflow-hidden overflow-y-scroll">{children}</div>
-      <Footer />
+    <div className="mx-auto flex h-full max-w-lg flex-col antialiased">
+      <div className="grow overflow-hidden">{children}</div>
+      {!shouldHideFooter && <Footer />}
     </div>
   );
 };

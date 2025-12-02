@@ -13,9 +13,11 @@ const HostItemCard = ({ data }: { data: THostItemData }) => {
             <span className="text-neutral-500">{data.name}</span>
             <span className="text-neutral-50">{data.id}</span>
           </div>
-          <div className="text-xs leading-[16.8px] -tracking-[0.48px] text-neutral-500">
-            {data.totalVisits} Visits Hosted
-          </div>
+          {data.totalVisits > 0 && (
+            <div className="text-xs leading-[16.8px] -tracking-[0.48px] text-neutral-500">
+              {data.totalVisits} Visits Hosted
+            </div>
+          )}
         </div>
         <div className="flex gap-0.5">
           <Location className="h-4 w-4 shrink-0" />

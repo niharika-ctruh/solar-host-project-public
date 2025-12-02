@@ -40,6 +40,14 @@ export const clearStorages = () => {
   sessionStorage.clear(); // clearing the session storage
 };
 
+export const handleLogout = (message: string = 'Logged out successfully!') => {
+  setTimeout(() => {
+    clearStorages();
+    toast.success(message);
+    window.location.href = '/';
+  }, 500);
+};
+
 export const handleApiSuccess = ({
   message,
   fallback = 'Success!',
@@ -65,4 +73,26 @@ export const handleThrowError = ({ error }: { error: unknown }) => {
     throw error?.response?.data?.message || 'API Error Occurred';
   }
   throw 'Something went wrong';
+};
+
+export const formatDate = (isoDate: string) => {
+  const d = new Date(isoDate);
+
+  const day = d.toLocaleString('en-GB', { day: '2-digit' });
+  const month = d.toLocaleString('en-GB', { month: 'short' });
+  const year = d.toLocaleString('en-GB', { year: 'numeric' });
+
+  return `${day} ${month}, ${year}`;
+};
+
+export const to12Hour = (time24: string) => {
+  if (!time24) return time24;
+
+  const [hourStr, minute] = time24.split(':');
+  const hour = parseInt(hourStr, 10);
+
+  const suffix = hour >= 12 ? 'PM' : 'AM';
+  const hour12 = hour % 12 || 12;
+
+  return `${hour12}:${minute} ${suffix}`;
 };

@@ -1,12 +1,12 @@
-import Button from '@/components/ui/Button';
-import Link from 'next/link';
+import { Suspense } from 'react';
+import Requests from './Requests';
 
-const Requests = () => {
+const Page = () => {
   return (
-    <Link href="/requests/requestId" className="mt-10 block h-min px-10">
-      <Button content="Go to request detail page" />
-    </Link>
+    <Suspense fallback={null}>
+      <Requests />
+    </Suspense>
   );
 };
 
-export default Requests;
+export default Page;

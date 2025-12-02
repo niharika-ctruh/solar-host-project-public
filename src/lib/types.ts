@@ -1,8 +1,44 @@
 import { Icon } from 'iconsax-reactjs';
+import { ReactNode, SVGProps } from 'react';
+
+export interface TQueryParams {
+  [key: string]: string;
+}
 
 export type TFooterData = { name: string; icon: Icon; path: string };
 
+export type IconProps = SVGProps<SVGSVGElement>;
+
 export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'disable';
+
+export type TRequestStatus =
+  | 'pending'
+  | 'visit_scheduled'
+  | 'visit_rescheduled'
+  | 'completed'
+  | 'cancelled';
+
+export type TStatusConfig = {
+  label: string;
+  bg: string;
+  text: string;
+  icon: ReactNode;
+};
+
+export interface LoginUserBody {
+  email: string;
+  password: string;
+}
+
+export interface UserData {
+  _id: string;
+  token: string;
+}
+
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
 
 export interface ButtonProps {
   variant?: ButtonVariant;
@@ -15,14 +51,37 @@ export interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
 }
 
-export interface LoginUserBody {
-  email: string;
-  password: string;
+export interface SendRequestBody {
+  customerId: string;
+  name: string;
+  coordinates: [number, number];
+  address: string;
+  date: string;
+  timeSlot: string;
 }
 
-export interface UserData {
+export interface DateItem {
+  date: number;
+  day: string;
+}
+
+export interface TRequestData {
   _id: string;
-  token: string;
+  date: string;
+  timeSlot: string;
+  status: TRequestStatus;
+  customer: {
+    customerId: string;
+    name: string;
+    consultantId: string;
+    address: string;
+  };
+  acceptedHost: {
+    address: { cluster: string; fullAddress: string };
+    hostSseId: string;
+    name: string;
+    visitHostedCount: number;
+  };
 }
 
 export type THostItemData = {
@@ -32,13 +91,27 @@ export type THostItemData = {
   address: string;
 };
 
-export type TRequestStatus = 'waiting' | 'confirmed' | 'cancelled';
-
 export type TRequestDetailData = {
   name: string;
   id: string;
   date: string;
   time: string;
   status: TRequestStatus;
-  expiryDate?: string;
 };
+
+export interface SendRequestFormType {
+  customerName: string;
+  customerId: string;
+  dateOfVisit: Date | null;
+  timeOfVisit: string;
+  address: string;
+}
+
+export interface UpdateRequestBody {
+  status: TRequestStatus;
+}
+
+export interface RequestsListProps {
+  isTodayVisits?: boolean;
+  className?: string;
+}
