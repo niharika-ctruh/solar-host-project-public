@@ -7,10 +7,11 @@ export const useLoginUser = () => {
   return useMutation({
     mutationKey: ['login-user'],
     mutationFn: (bodyData: LoginUserBody) => loginUser(bodyData),
-    onSuccess: (data) => {
+    onSuccess: (data, bodyData) => {
       saveUser({
         _id: data._id,
         token: data.token,
+        email: bodyData.email,
       });
     },
   });

@@ -91,7 +91,7 @@ const NewRequest = () => {
   ]);
 
   return (
-    <div className="bg-background-50 flex h-full flex-col overflow-y-scroll px-6 pb-6">
+    <div className="bg-background-50 font-dm-sans flex h-full flex-col overflow-y-scroll px-6 pb-6">
       <Fragment>
         {currentStep === 'step1' && (
           <Fragment>
@@ -101,7 +101,7 @@ const NewRequest = () => {
                   className="cursor-pointer"
                   onClick={handleBackToRequest}
                 />
-                <p className="font-dm-sans text-lg/6.25 font-semibold text-neutral-500">
+                <p className="text-lg/6.25 font-semibold text-neutral-500">
                   New Visit Request
                 </p>
               </div>
@@ -115,9 +115,7 @@ const NewRequest = () => {
 
             <form className="mx-auto flex w-full max-w-2xl flex-1 grow flex-col gap-4 pb-6">
               <div className="flex flex-col gap-3">
-                <p className="font-dm-sans text-base/5.5 font-semibold">
-                  Customer Location
-                </p>
+                <p className="text-base/5.5 font-semibold">Customer Location</p>
                 <div className="flex flex-col gap-1">
                   <textarea
                     {...register('address', {
@@ -125,10 +123,10 @@ const NewRequest = () => {
                     })}
                     placeholder="Enter your address"
                     rows={4}
-                    className={`w-full rounded-md border p-3 text-sm leading-tight ${errors.address ? 'border-red-900' : 'border-gray-400'} bg-background-50 font-dm-sans text-primary font-normal`}
+                    className={`w-full rounded-md border p-3 text-sm leading-tight ${errors.address ? 'border-red-900' : 'border-gray-400'} bg-background-50 text-primary font-normal`}
                   />
                   {errors.address && (
-                    <p className="font-dm-sans mt-2 w-full text-left text-sm text-red-900">
+                    <p className="mt-2 w-full text-left text-sm text-red-900">
                       {errors.address.message}
                     </p>
                   )}
@@ -138,58 +136,44 @@ const NewRequest = () => {
               <hr className="border-background-400 border-t" />
 
               <div className="flex flex-col gap-3">
-                <p className="font-dm-sans text-base/5.5 font-semibold">
-                  Customer Details
-                </p>
-                <div className="flex flex-col gap-1">
-                  <label
-                    className={`font-roboto! text-xs font-medium tracking-[-0.56px] ${errors.customerName ? 'text-red-900' : 'text-gray-600'}`}
-                  >
-                    Customer Name
-                  </label>
-                  <Input
-                    {...register('customerName', {
-                      required: 'Customer Name is required',
-                      pattern: {
-                        value: /^[A-Za-z]+(?:\s[A-Za-z]+)*$/,
-                        message:
-                          'Customer name should contain only letters and spaces',
-                      },
-                    })}
-                    placeholderText="Enter your customer name"
-                    type="text"
-                    errorText={errors?.customerName?.message as string}
-                    className="font-dm-sans text-text-primary! p-3!"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label
-                    className={`font-roboto! text-xs font-medium tracking-[-0.56px] ${errors.customerId ? 'text-red-900' : 'text-gray-600'}`}
-                  >
-                    Customer ID
-                  </label>
-                  <Input
-                    {...register('customerId', {
-                      required: 'Customer ID is required',
-                    })}
-                    placeholderText="Enter your customer id"
-                    type="text"
-                    errorText={errors?.customerId?.message as string}
-                    className="font-dm-sans text-text-primary! p-3!"
-                  />
-                </div>
+                <p className="text-base/5.5 font-semibold">Customer Details</p>
+                <Input
+                  {...register('customerName', {
+                    required: 'Customer Name is required',
+                    pattern: {
+                      value: /^[A-Za-z]+(?:\s[A-Za-z]+)*$/,
+                      message:
+                        'Customer name should contain only letters and spaces',
+                    },
+                  })}
+                  wrapperClassName="gap-1!"
+                  label="Customer Name"
+                  placeholderText="Enter your customer name"
+                  type="text"
+                  errorText={errors?.customerName?.message as string}
+                  className="text-text-primary! p-3!"
+                />
+                <Input
+                  {...register('customerId', {
+                    required: 'Customer ID is required',
+                  })}
+                  wrapperClassName="gap-1!"
+                  label="Customer ID"
+                  placeholderText="Enter your customer id"
+                  type="text"
+                  errorText={errors?.customerId?.message as string}
+                  className="text-text-primary! p-3!"
+                />
               </div>
 
               <hr className="border-background-400 border-t" />
 
               <div>
-                <p className="font-dm-sans text-base/5.5 font-semibold">
-                  Visit Preference
-                </p>
+                <p className="text-base/5.5 font-semibold">Visit Preference</p>
                 <div className="mt-3 flex items-start gap-3">
                   <div className="flex w-full flex-col gap-1">
                     <label
-                      className={`font-roboto! text-xs font-medium tracking-[-0.56px] ${errors.dateOfVisit ? 'text-red-900' : 'text-gray-600'}`}
+                      className={`text-xs font-medium tracking-[-0.56px] ${errors.dateOfVisit ? 'text-red-900' : 'text-gray-600'}`}
                     >
                       Date of Visit
                     </label>
@@ -225,7 +209,7 @@ const NewRequest = () => {
                   {/* Time Field */}
                   <div className="flex w-full flex-col gap-1">
                     <label
-                      className={`font-roboto! text-xs font-medium tracking-[-0.56px] ${errors.timeOfVisit ? 'text-red-900' : 'text-gray-600'}`}
+                      className={`text-xs font-medium tracking-[-0.56px] ${errors.timeOfVisit ? 'text-red-900' : 'text-gray-600'}`}
                     >
                       Time of Visit
                     </label>

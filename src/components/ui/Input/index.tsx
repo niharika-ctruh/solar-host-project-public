@@ -1,9 +1,12 @@
+import { InfoCircle } from 'iconsax-reactjs';
 import { InputHTMLAttributes, ReactNode } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
 const Input = ({
-  className,
-  placeholderText = '',
+  wrapperClassName = '',
+  className = '',
+  label,
+  placeholderText,
   disabled = false,
   value,
   readOnly,
@@ -14,7 +17,9 @@ const Input = ({
   rightIcon,
   ...props
 }: InputHTMLAttributes<HTMLInputElement> & {
+  wrapperClassName?: string;
   className?: string;
+  label?: string;
   placeholderText?: string;
   disabled?: boolean;
   value?: string;
@@ -30,7 +35,16 @@ const Input = ({
   const isIconPresent = leftIcon || rightIcon;
 
   return (
-    <div className="font-dm-sans flex w-full flex-col gap-2 text-left">
+    <div
+      className={`font-dm-sans flex w-full flex-col gap-2 text-left ${wrapperClassName}`}
+    >
+      {label && (
+        <div
+          className={`${errorText ? 'text-red-900' : 'text-background-dark-500'} text-sm font-medium -tracking-[0.56px]`}
+        >
+          {label}
+        </div>
+      )}
       <div
         className={`focus-within:border-primary-400 focus-within:bg-primary-50 relative flex items-center gap-2.5 rounded-md border ${isIconPresent ? 'p-3' : ''} ${errorText ? 'border-red-900!' : 'border-gray-400'} `}
       >
@@ -47,7 +61,8 @@ const Input = ({
         {rightIcon}
       </div>
       {errorText && (
-        <p className="text-sm leading-[19px] font-medium -tracking-[0.56px] text-red-900">
+        <p className="flex items-center gap-1 text-sm leading-[19px] font-medium -tracking-[0.56px] text-red-900">
+          <InfoCircle className="h-4 w-4" />
           {errorText}
         </p>
       )}

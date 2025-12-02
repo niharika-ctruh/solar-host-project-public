@@ -3,7 +3,6 @@ import type {
   LoginUserBody,
   SendRequestBody,
   TQueryParams,
-  UpdateRequestBody,
 } from '@/lib/types';
 import {
   getUser,
@@ -30,9 +29,7 @@ privateApiClient.interceptors.request.use(
     const user = getUser();
     const token = user?.token;
 
-    if (token) {
-      config.headers.Authorization = token;
-    }
+    if (token) config.headers.Authorization = token;
 
     return config;
   },
@@ -46,11 +43,12 @@ privateApiClient.interceptors.response.use(
     const status = error?.response?.status;
     const message = error?.response?.data?.message;
 
-    const isUnauthorized = status === 401 || message?.includes('Forbidden');
+    const isUnauthorized =
+      status === 401 ||
+      message?.includes?.('Forbidden') ||
+      message?.includes?.('Unauthorized');
 
-    if (isUnauthorized) {
-      handleLogout('Session expired. Please login again.');
-    }
+    if (isUnauthorized) handleLogout('Session expired. Please login again.');
 
     return Promise.reject(error);
   },
@@ -89,7 +87,7 @@ export const passwordReset = async ({
 }) => {
   try {
     const response = await publicApiClient.post(
-      `/auth/reset-password?data=${data}`,
+      `/auth/reset-password?data=${encodeURIComponent(data)}`,
       {
         password,
       },
@@ -168,17 +166,28 @@ export const sendRequest = async (body: SendRequestBody) => {
   }
 };
 
-export const updateRequest = async ({
-  id,
-  body,
-}: {
-  id: string;
-  body: UpdateRequestBody;
-}) => {
+// export const updateRequest = async ({
+//   id,
+//   body,
+// }: {
+//   id: string;
+//   body: UpdateRequestBody;
+// }) => {
+//   try {
+//     const response = await privateApiClient.patch(
+//       `/request/visit-request/${id}`,
+//       body,
+//     );
+//     return response.data;
+//   } catch (error) {
+//     handleThrowError({ error });
+//   }
+// };
+
+export const cancelRequest = async (id: string) => {
   try {
-    const response = await privateApiClient.patch(
-      `/request/visit-request/${id}`,
-      body,
+    const response = await privateApiClient.post(
+      `/request/cancel-visit-request/${id}`,
     );
     return response.data;
   } catch (error) {

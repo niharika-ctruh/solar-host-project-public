@@ -18,6 +18,8 @@ const Home = () => {
             width={0}
             height={0}
             sizes="100vw"
+            loading="eager"
+            priority
           />
           <Link href="/requests/new">
             <Button

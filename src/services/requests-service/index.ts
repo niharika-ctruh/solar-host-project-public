@@ -8,9 +8,9 @@ import {
   getRequestById,
   getRequests,
   sendRequest,
-  updateRequest,
+  cancelRequest,
 } from '../api';
-import { SendRequestBody, TQueryParams, UpdateRequestBody } from '@/lib/types';
+import { SendRequestBody, TQueryParams } from '@/lib/types';
 import useQueryParams from '@/hooks/useQueryParams';
 import { useParams } from 'next/navigation';
 
@@ -50,13 +50,25 @@ export const useSendRequest = () => {
   });
 };
 
-export const useUpdateRequest = () => {
+// export const useUpdateRequest = () => {
+//   const { id } = useParams() as { id: string };
+//   const queryClient = useQueryClient();
+
+//   return useMutation({
+//     mutationKey: ['update-request', id],
+//     mutationFn: (body: UpdateRequestBody) => updateRequest({ id, body }),
+//     onSuccess: () =>
+//       queryClient.invalidateQueries({ queryKey: ['get-requests'] }),
+//   });
+// };
+
+export const useCancelRequest = () => {
   const { id } = useParams() as { id: string };
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['update-request', id],
-    mutationFn: (body: UpdateRequestBody) => updateRequest({ id, body }),
+    mutationKey: ['cancel-request', id],
+    mutationFn: () => cancelRequest(id),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ['get-requests'] }),
   });

@@ -7,13 +7,43 @@ export const SECRET_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string;
 export const USER_LOCAL_STORAGE_KEY = 'USER_INFO';
 
 const encryptData = (data: string): string => {
-  return CryptoJS.AES.encrypt(data, SECRET_KEY).toString();
+  const keyHex = CryptoJS.enc.Hex.parse(SECRET_KEY);
+  const iv = CryptoJS.lib.WordArray.random(16);
+
+  const encrypted = CryptoJS.AES.encrypt(data, keyHex, {
+    iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7,
+  });
+
+  return iv.toString(CryptoJS.enc.Base64) + ':' + encrypted.toString();
 };
 
-const decryptData = (encryptedData: string) => {
+export const decryptData = (encryptedData: string) => {
   try {
-    const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_KEY);
-    return bytes.toString(CryptoJS.enc.Utf8);
+    if (!encryptedData.includes(':')) return undefined;
+
+    const [ivBase64, cipherBase64] = encryptedData.split(':');
+    if (!ivBase64 || !cipherBase64) return undefined;
+
+    const keyHex = CryptoJS.enc.Hex.parse(SECRET_KEY);
+    const iv = CryptoJS.enc.Base64.parse(ivBase64);
+
+    let bytes;
+    try {
+      bytes = CryptoJS.AES.decrypt(cipherBase64, keyHex, {
+        iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      });
+    } catch (error) {
+      return undefined;
+    }
+
+    const result = bytes.toString(CryptoJS.enc.Utf8) || undefined;
+    if (!result) return undefined;
+
+    return result;
   } catch (error) {
     console.error(error);
     return undefined;
@@ -36,8 +66,8 @@ export const getUser = () => {
 };
 
 export const clearStorages = () => {
-  localStorage.clear(); // clearing the local storage
-  sessionStorage.clear(); // clearing the session storage
+  localStorage.clear();
+  sessionStorage.clear();
 };
 
 export const handleLogout = (message: string = 'Logged out successfully!') => {

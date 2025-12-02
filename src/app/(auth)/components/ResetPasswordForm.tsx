@@ -19,16 +19,9 @@ const ResetPasswordForm = ({
   } = useForm<{ newPassword: string; confirmPassword: string }>();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col gap-4">
-        <div className="text-background-dark-500 text-center text-sm leading-[19px] font-semibold tracking-[-0.56px]">
-          Resetting Password for {email}
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label className="font-dm-sans text-background-dark-500 text-sm font-medium tracking-[-0.56px]">
-            New Password
-          </label>
+    <form onSubmit={handleSubmit(onSubmit)} className="grow">
+      <div className="flex h-full flex-col justify-between gap-4">
+        <div className="flex flex-col gap-4">
           <Input
             {...register('newPassword', {
               required: 'Password required',
@@ -54,13 +47,9 @@ const ResetPasswordForm = ({
               setValueAs: (v) => v.trim(),
             })}
             type="password"
+            label="New Password"
             errorText={errors?.newPassword?.message as string}
           />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="font-dm-sans text-background-dark-500 text-sm font-medium tracking-[-0.56px]">
-            Confirm Password
-          </label>
           <Input
             {...register('confirmPassword', {
               required: 'Confirm the password',
@@ -88,10 +77,16 @@ const ResetPasswordForm = ({
               setValueAs: (v) => v.trim(),
             })}
             type="password"
+            label="Confirm Password"
             errorText={errors?.confirmPassword?.message as string}
           />
         </div>
-        <Button type="submit" content="Submit" isLoading={isLoading} />
+        <Button
+          type="submit"
+          content="Submit"
+          isLoading={isLoading}
+          className="h-min"
+        />
       </div>
     </form>
   );

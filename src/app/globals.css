@@ -17,7 +17,6 @@
 @theme {
   /* fonts */
   --font-dm-sans: var(--font-dm-sans);
-  --font-roboto: var(--font-roboto);
 
   /* primary */
   --color-primary-500: #131ca2;

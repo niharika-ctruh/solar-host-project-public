@@ -33,6 +33,7 @@ export interface LoginUserBody {
 export interface UserData {
   _id: string;
   token: string;
+  email: string;
 }
 
 export interface Coordinates {
@@ -107,9 +108,9 @@ export interface SendRequestFormType {
   address: string;
 }
 
-export interface UpdateRequestBody {
-  status: TRequestStatus;
-}
+// export interface UpdateRequestBody {
+//   status: TRequestStatus;
+// }
 
 export interface RequestsListProps {
   isTodayVisits?: boolean;

@@ -4,18 +4,12 @@ import RequestDetailCard from './components/RequestDetailCard';
 import HostItemCard from './components/HostItemCard';
 import {
   useGetRequestById,
-  useUpdateRequest,
+  useCancelRequest,
 } from '@/services/requests-service';
 import { TRequestData } from '@/lib/types';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
-import {
-  ArrowCircleRight,
-  ArrowCircleRight2,
-  ArrowLeft2,
-  ArrowRight,
-  ArrowRight2,
-} from 'iconsax-reactjs';
+import { ArrowCircleRight2, ArrowLeft2 } from 'iconsax-reactjs';
 import { handleApiError, handleApiSuccess } from '@/lib/utils';
 import { useParams, useRouter } from 'next/navigation';
 import ShowError from '@/components/ui/ShowError';
@@ -27,7 +21,7 @@ const RequestDetail = () => {
   const router = useRouter();
   const { id } = useParams();
   const getRequestByIdQuery = useGetRequestById();
-  const updateRequestQuery = useUpdateRequest();
+  const cancelRequestQuery = useCancelRequest();
 
   const selectedRequest = getRequestByIdQuery.data?.data as TRequestData;
   const showHostItemCard =
@@ -36,19 +30,17 @@ const RequestDetail = () => {
       selectedRequest?.status === 'completed') &&
     selectedRequest?.acceptedHost;
 
-  const handleCancelRequest = () =>
-    updateRequestQuery.mutate(
-      { status: 'cancelled' },
-      {
-        onSuccess: () => {
-          handleApiSuccess({
-            message: 'Request successfully cancelled!',
-          });
-          router.replace('/requests');
-        },
-        onError: (error) => handleApiError({ error }),
+  const handleCancelRequest = () => {
+    cancelRequestQuery.mutate(undefined, {
+      onSuccess: () => {
+        handleApiSuccess({
+          message: 'Request cancelled successfully!',
+        });
+        router.replace('/requests');
       },
-    );
+      onError: (error) => handleApiError({ error }),
+    });
+  };
 
   return (
     <div className="flex h-full flex-col gap-3 px-3">

@@ -10,7 +10,7 @@ const variantStyles: Record<ButtonVariant, string> = {
   primary: 'bg-primary-400 text-background-50',
   secondary: 'bg-transparent text-brand border border-brand',
   tertiary: 'bg-black-10 text-black-300',
-  disable: 'bg-neutral-500/50 text-background-50',
+  disable: 'opacity-30',
 };
 
 const animatingDotColors: Record<ButtonVariant, string> = {

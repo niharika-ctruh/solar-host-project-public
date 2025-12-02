@@ -1,9 +1,7 @@
 'use client';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FOOTER_DATA } from '@/data';
 import Link from 'next/link';
-import { handleLogout } from '@/lib/utils';
 
 const Footer = () => {
   const pathname = usePathname();
