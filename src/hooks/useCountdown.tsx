@@ -38,11 +38,14 @@ const useCountdown = ({
         return;
       }
 
-      const diffHours = Math.floor(diff / (1000 * 60 * 60));
+      const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const diffHours = Math.floor(
+        (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+      );
       const diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const diffSeconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      setTimeLeft(`${diffHours}h ${diffMinutes}m ${diffSeconds}s`);
+      setTimeLeft(`${diffDays}d ${diffHours}h ${diffMinutes}m ${diffSeconds}s`);
     };
 
     updateTime();
