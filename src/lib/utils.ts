@@ -105,7 +105,8 @@ export const handleThrowError = ({ error }: { error: unknown }) => {
   throw 'Something went wrong';
 };
 
-export const formatDate = (isoDate: string) => {
+// Example: "02 Dec, 2025"
+export const formatShortDate = (isoDate: string) => {
   const d = new Date(isoDate);
 
   const day = d.toLocaleString('en-GB', { day: '2-digit' });
@@ -115,6 +116,24 @@ export const formatDate = (isoDate: string) => {
   return `${day} ${month}, ${year}`;
 };
 
+// Example: "Tue, 02 Dec 2025, 10:05 AM"
+export const formatFullDateTime = (isoDate: string) => {
+  const d = new Date(isoDate);
+
+  const weekday = d.toLocaleString('en-US', { weekday: 'short' });
+  const day = d.toLocaleString('en-US', { day: '2-digit' });
+  const month = d.toLocaleString('en-US', { month: 'short' });
+  const year = d.getFullYear();
+
+  let hours = d.getHours();
+  const minutes = d.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12;
+
+  return `${weekday}, ${day} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
+};
+
+// Example: "10:05 AM"
 export const to12Hour = (time24: string) => {
   if (!time24) return time24;
 

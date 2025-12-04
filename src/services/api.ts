@@ -3,6 +3,7 @@ import type {
   LoginUserBody,
   SendRequestBody,
   TQueryParams,
+  UpdateRequestBody,
 } from '@/lib/types';
 import {
   getUser,
@@ -98,7 +99,7 @@ export const passwordReset = async ({
   }
 };
 
-// REQUEST SERVICE
+// REQUESTS SERVICE
 export const getRequests = async ({
   page,
   filters,
@@ -133,7 +134,7 @@ export const getCoordinatesFromAddress = async (
   address: string,
 ): Promise<Coordinates | null> => {
   if (!GOOGLE_MAPS_API_KEY) {
-    console.error('Google Maps API key is missing');
+    handleApiError({ error: 'Google Maps API key is missing' });
     return null;
   }
 
@@ -166,23 +167,23 @@ export const sendRequest = async (body: SendRequestBody) => {
   }
 };
 
-// export const updateRequest = async ({
-//   id,
-//   body,
-// }: {
-//   id: string;
-//   body: UpdateRequestBody;
-// }) => {
-//   try {
-//     const response = await privateApiClient.patch(
-//       `/request/visit-request/${id}`,
-//       body,
-//     );
-//     return response.data;
-//   } catch (error) {
-//     handleThrowError({ error });
-//   }
-// };
+export const updateRequest = async ({
+  id,
+  body,
+}: {
+  id: string;
+  body: UpdateRequestBody;
+}) => {
+  try {
+    const response = await privateApiClient.patch(
+      `/request/visit-request/${id}`,
+      body,
+    );
+    return response.data;
+  } catch (error) {
+    handleThrowError({ error });
+  }
+};
 
 export const cancelRequest = async (id: string) => {
   try {
@@ -192,5 +193,41 @@ export const cancelRequest = async (id: string) => {
     return response.data;
   } catch (error) {
     handleThrowError({ error });
+  }
+};
+
+// VISITS SERVICE
+export const getVisits = async ({
+  page,
+  filters,
+}: {
+  page: QueryFunctionContext;
+  filters: TQueryParams;
+}) => {
+  try {
+    const response = await privateApiClient.get(
+      '/request/scheduled-visit-requests',
+      {
+        params: {
+          page: page.pageParam,
+          limit: 4,
+          ...filters,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    handleThrowError({ error });
+  }
+};
+
+export const getVisitById = async (id: string) => {
+  try {
+    const response = await privateApiClient.get(
+      `/request/scheduled-visit-request/${id}`,
+    );
+    return response.data;
+  } catch (error) {
+    handleApiError({ error });
   }
 };

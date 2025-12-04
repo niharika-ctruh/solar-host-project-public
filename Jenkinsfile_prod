@@ -1,0 +1,51 @@
+pipeline {
+    agent { label params.Environment }
+    stages {
+        stage('Checkout') {
+         agent none
+            steps {
+                checkout scm
+            }
+        }
+        stage('env setup') {
+         agent none
+            steps {
+                    script {
+                    writeFile file: 'envfile', text: "${params.EnvVariables}"
+                    writeFile file: './env', text: "${params.EnvVariables}"
+                    writeFile file: '.env.production', text: "${params.EnvVariables}"
+                    writeFile file: './.env', text: "${params.EnvVariables}"
+                    }
+                }
+        }
+
+        stage('Install Dependencies and build') {
+        agent {
+            docker {
+                reuseNode true
+                image 'node:23' // Use an appropriate Node.js version
+                args '-u root:root'
+            }
+        }
+            steps {
+                sh 'npm install'
+                sh 'npm install --save-dev @rollup/rollup-linux-x64-gnu'
+                sh 'npm run build' // Modify as needed
+            }
+        }
+         stage ('build backup' ) {
+            steps {
+                sh 'sudo mkdir -p /app/backup/solar_$BUILD_NUMBER/'
+                sh 'sudo cp -r dist /app/backup/solar_$BUILD_NUMBER/.'
+           }
+       }
+        stage ('compress and deploy to remote' ) {
+            steps {
+                sh 'sudo mkdir -p /var/www/html/solar_dashboard'
+                sh 'sudo rm -rf /var/www/html/solar_dashboard/*'
+                sh 'sudo cp -r dist/* /var/www/html/solar_dashboard/.'
+                sh 'sudo systemctl restart nginx'
+           }
+       }
+    }
+}

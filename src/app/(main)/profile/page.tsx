@@ -35,7 +35,7 @@ const Profile = () => {
       {/* Header */}
       <div className="flex min-h-20 items-center justify-between gap-2 px-3 py-5 text-lg font-semibold">
         <Link href="/home">
-          <ArrowLeft2 className="h-6 w-6" />
+          <ArrowLeft2 size="24" />
         </Link>
         <div className="grow leading-[25px] -tracking-[0.72px] text-neutral-500">
           Profile
@@ -65,7 +65,7 @@ const Profile = () => {
           content="Log out"
           variant="secondary"
           className="h-min border-red-900 py-[11px]! text-base! text-red-900"
-          leftIcon={<LogoutCurve className="h-5 w-5 text-red-900" />}
+          leftIcon={<LogoutCurve size="20" className="text-red-900" />}
           onClick={() => handleLogout()}
         />
       </div>

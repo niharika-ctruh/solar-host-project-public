@@ -25,7 +25,7 @@ const Home = () => {
             <Button
               type="button"
               content="New Request"
-              leftIcon={<CalendarAdd className="h-6 w-6" />}
+              leftIcon={<CalendarAdd size="24" />}
               className="bg-primary-400 rounded-md px-3! py-2! text-base! [&>div]:gap-2"
             />
           </Link>

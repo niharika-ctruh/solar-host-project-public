@@ -9,20 +9,22 @@ import {
   getRequests,
   sendRequest,
   cancelRequest,
+  updateRequest,
 } from '../api';
-import { SendRequestBody, TQueryParams } from '@/lib/types';
+import { SendRequestBody, TQueryParams, UpdateRequestBody } from '@/lib/types';
 import useQueryParams from '@/hooks/useQueryParams';
 import { useParams } from 'next/navigation';
+import useDebounce from '@/hooks/useDebounce';
 
 export const useGetRequests = () => {
   const { queryParams } = useQueryParams();
-  const filters: TQueryParams = {};
+  const debouncedNameQuery = useDebounce(queryParams.name, 500);
 
-  ['name', 'date', 'status'].forEach((key) => {
-    if (queryParams[key]) {
-      filters[key] = queryParams[key];
-    }
-  });
+  const filters: TQueryParams = {
+    name: debouncedNameQuery,
+    date: queryParams.date,
+    status: queryParams.status,
+  };
 
   return useInfiniteQuery({
     queryKey: ['get-requests', filters],
@@ -39,7 +41,7 @@ export const useGetRequestById = () => {
   return useQuery({
     queryKey: ['get-request-by-id', id],
     queryFn: () => getRequestById(id),
-    enabled: id !== undefined,
+    enabled: !!id && id.length === 24,
   });
 };
 
@@ -50,17 +52,20 @@ export const useSendRequest = () => {
   });
 };
 
-// export const useUpdateRequest = () => {
-//   const { id } = useParams() as { id: string };
-//   const queryClient = useQueryClient();
+export const useUpdateRequest = () => {
+  const { id } = useParams() as { id: string };
+  const queryClient = useQueryClient();
 
-//   return useMutation({
-//     mutationKey: ['update-request', id],
-//     mutationFn: (body: UpdateRequestBody) => updateRequest({ id, body }),
-//     onSuccess: () =>
-//       queryClient.invalidateQueries({ queryKey: ['get-requests'] }),
-//   });
-// };
+  return useMutation({
+    mutationKey: ['update-request', id],
+    mutationFn: (body: UpdateRequestBody) => updateRequest({ id, body }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['get-requests'] });
+      queryClient.invalidateQueries({ queryKey: ['get-visits', id] });
+      queryClient.invalidateQueries({ queryKey: ['get-visit-by-id', id] });
+    },
+  });
+};
 
 export const useCancelRequest = () => {
   const { id } = useParams() as { id: string };
@@ -69,7 +74,10 @@ export const useCancelRequest = () => {
   return useMutation({
     mutationKey: ['cancel-request', id],
     mutationFn: () => cancelRequest(id),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['get-requests'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['get-requests'] });
+      queryClient.invalidateQueries({ queryKey: ['get-visits', id] });
+      queryClient.invalidateQueries({ queryKey: ['get-visit-by-id', id] });
+    },
   });
 };

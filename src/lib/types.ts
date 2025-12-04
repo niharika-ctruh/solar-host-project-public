@@ -18,11 +18,23 @@ export type TRequestStatus =
   | 'completed'
   | 'cancelled';
 
-export type TStatusConfig = {
+export type TVisitStatus = Exclude<TRequestStatus, 'pending'>;
+
+export type TRequestStatusConfig = {
   label: string;
   bg: string;
   text: string;
   icon: ReactNode;
+};
+
+export type TVisitStatusConfig = {
+  label: string;
+  leftBg: string;
+  detailBg: string;
+  detailText: string;
+  button: string;
+  icon: ReactNode;
+  className?: string;
 };
 
 export interface LoginUserBody {
@@ -66,25 +78,6 @@ export interface DateItem {
   day: string;
 }
 
-export interface TRequestData {
-  _id: string;
-  date: string;
-  timeSlot: string;
-  status: TRequestStatus;
-  customer: {
-    customerId: string;
-    name: string;
-    consultantId: string;
-    address: string;
-  };
-  acceptedHost: {
-    address: { cluster: string; fullAddress: string };
-    hostSseId: string;
-    name: string;
-    visitHostedCount: number;
-  };
-}
-
 export type THostItemData = {
   name: string;
   id: string;
@@ -108,11 +101,58 @@ export interface SendRequestFormType {
   address: string;
 }
 
-// export interface UpdateRequestBody {
-//   status: TRequestStatus;
-// }
+export type UpdateRequestBody =
+  | {
+      status: TRequestStatus;
+    }
+  | {
+      date: string;
+    }
+  | {
+      timeSlot: string;
+    }
+  | {
+      date: string;
+      timeSlot: string;
+    };
 
 export interface RequestsListProps {
   isTodayVisits?: boolean;
   className?: string;
 }
+
+export interface ModalProps {
+  open: boolean;
+  onClose: () => void;
+  children: ReactNode;
+  className?: string;
+}
+
+export type TVisitData = {
+  _id: string;
+  date: string;
+  customer: {
+    name: string;
+    address: string;
+    customerId: string;
+  };
+  acceptedHost: {
+    name: string;
+    visitHostedCount: number;
+    hostSseId: string;
+  };
+  status: TVisitStatus;
+  timeSlot: string;
+  createdAt: string;
+  consultant?: {
+    firstName: string;
+    lastName: string;
+  };
+};
+
+export type TRequestData = Omit<TVisitData, 'acceptedHost' | 'status'> & {
+  status: TRequestStatus;
+  acceptedHost: TVisitData['acceptedHost'] & {
+    address: { cluster: string; fullAddress: string };
+  };
+};

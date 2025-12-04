@@ -28,7 +28,7 @@ const DatePickerRow = ({
   }, []);
 
   return (
-    <div className="mx-auto flex w-full items-center justify-around">
+    <div className="font-dm-sans mx-auto flex w-full items-center justify-around">
       {!dates.length
         ? Array.from({ length: 5 }).map((_, i) => (
             <Skeleton key={i} className="h-14! w-12!" />
@@ -43,12 +43,12 @@ const DatePickerRow = ({
                 className={`border-background-400 flex flex-col gap-1 ${isActive ? 'bg-primary-400' : 'background-50'} h-14 w-12 cursor-pointer items-center justify-center rounded-lg border`}
               >
                 <div
-                  className={`font-dm-sans text-[18px] leading-[18px] font-semibold tracking-[-0.72px] ${isActive ? 'text-background-50' : 'text-neutral-100'}`}
+                  className={`text-[18px] leading-[18px] font-semibold tracking-[-0.72px] ${isActive ? 'text-background-50' : 'text-neutral-100'}`}
                 >
                   {date.getDate()}
                 </div>
                 <div
-                  className={`font-dm-sans text-xs leading-3 font-semibold tracking-[-0.48px] uppercase ${isActive ? 'text-background-400' : 'text-neutral-dark-500'}`}
+                  className={`text-xs leading-3 font-semibold tracking-[-0.48px] uppercase ${isActive ? 'text-background-400' : 'text-neutral-dark-500'}`}
                 >
                   {date.toLocaleDateString('en-US', { weekday: 'short' })}
                 </div>

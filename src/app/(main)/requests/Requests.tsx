@@ -42,9 +42,9 @@ const Requests = () => {
   return (
     <div className="font-dm-sans flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between gap-2 px-3 py-5 text-lg font-semibold">
+      <header className="flex items-center justify-between gap-2 px-3 py-5 text-lg font-semibold">
         <Link href="/home">
-          <ArrowLeft2 className="h-6 w-6" />
+          <ArrowLeft2 size="24" />
         </Link>
         <div className="grow leading-[25px] -tracking-[0.72px] text-neutral-500">
           Visit Requests
@@ -53,11 +53,11 @@ const Requests = () => {
           <Button
             type="button"
             content="New Request"
-            leftIcon={<CalendarAdd className="h-6 w-6" />}
+            leftIcon={<CalendarAdd size="24" />}
             className="bg-primary-400 rounded-md px-3! py-2! text-base! [&>div]:gap-2"
           />
         </Link>
-      </div>
+      </header>
 
       <div className="flex grow flex-col gap-3 overflow-hidden px-3">
         {/* Date filter */}
@@ -70,7 +70,9 @@ const Requests = () => {
             ) {
               updateParams({ remove: ['date'] });
             } else {
-              updateParams({ set: { date: date.toISOString().split('T')[0] } });
+              updateParams({
+                set: { date: date.toISOString().split('T')[0] },
+              });
             }
           }}
         />
@@ -87,7 +89,8 @@ const Requests = () => {
               updateParams({ remove: ['name'] });
             }
           }}
-          leftIcon={<SearchNormal1 className="h-5 w-5 text-neutral-500" />}
+          defaultValue={queryParams.name}
+          leftIcon={<SearchNormal1 size="20" className="text-neutral-500" />}
         />
 
         {/* Tabs filter */}

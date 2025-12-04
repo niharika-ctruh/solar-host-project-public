@@ -1,12 +1,12 @@
-const Visits = () => {
+import { Suspense } from 'react';
+import Visits from './Visits';
+
+const Page = () => {
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex min-h-20 items-center justify-between border border-[red] px-4">
-        Visits Header
-      </div>
-      <div className="grow border border-[green]">Visits Body</div>
-    </div>
+    <Suspense>
+      <Visits />
+    </Suspense>
   );
 };
 
-export default Visits;
+export default Page;

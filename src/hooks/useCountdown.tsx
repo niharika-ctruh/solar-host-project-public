@@ -1,23 +1,24 @@
 import { TRequestStatus } from '@/lib/types';
 import { useEffect, useState } from 'react';
 
-const useCountdown = ({
-  date,
-  time,
-  status,
-}: {
-  date: string;
-  time: string;
-  status: TRequestStatus;
-}) => {
+const useCountdown = (
+  input?: {
+    date: string;
+    time: string;
+    status: TRequestStatus;
+  } | null,
+) => {
   const [timeLeft, setTimeLeft] = useState<string>('');
 
   useEffect(() => {
-    if (status !== 'pending') return;
+    if (!input) return;
+
+    const { date, time, status } = input;
+
+    if (status === 'completed' || status === 'cancelled') return;
 
     const updateTime = () => {
       const now = Date.now();
-
       const baseDate = new Date(date);
       const [hours, minutes] = time.split(':').map(Number);
 
@@ -52,7 +53,7 @@ const useCountdown = ({
 
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
-  }, [date, time, status]);
+  }, [input]);
 
   return timeLeft;
 };

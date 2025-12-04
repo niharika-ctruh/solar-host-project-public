@@ -5,7 +5,7 @@ import {
   ClockIcon,
   VerifyIcon,
 } from '@/components/icons';
-import { generateTimeSlots, ICON_COLORS } from '@/data';
+import { generateTimeSlots } from '@/data';
 import Input from '@/components/ui/Input';
 import { Clock, Location } from 'iconsax-reactjs';
 import { Fragment, useEffect, useState } from 'react';
@@ -21,11 +21,10 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { handleApiError } from '@/lib/utils';
 
-const timeSlots = generateTimeSlots();
-
 const NewRequest = () => {
   const [currentStep, setCurrentStep] = useState<'step1' | 'step2'>('step1');
   const router = useRouter();
+  const timeSlots = generateTimeSlots();
 
   const {
     register,
@@ -309,16 +308,14 @@ const NewRequest = () => {
                     <span className="text-primary-400 inline-flex items-center gap-0.5 text-base/6 font-semibold">
                       <Clock
                         variant="Bold"
-                        color={ICON_COLORS['primary-400']}
-                        className="shrink-0"
+                        className="text-primary-400 shrink-0"
                       />
                       {sendRequestQuery?.data?.request?.request?.timeSlot}
                     </span>
                     <span className="inline-flex items-start gap-0.5 text-xs/4.75 font-medium text-neutral-50">
                       <Location
-                        color={ICON_COLORS['neutral-50']}
                         variant="Bold"
-                        className="shrink-0"
+                        className="shrink-0 text-neutral-50"
                       />
                       {sendRequestQuery?.data?.request?.customer?.address}
                     </span>

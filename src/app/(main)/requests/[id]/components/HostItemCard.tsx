@@ -20,7 +20,7 @@ const HostItemCard = ({ data }: { data: THostItemData }) => {
           )}
         </div>
         <div className="flex gap-0.5">
-          <Location className="h-4 w-4 shrink-0" />
+          <Location size="16" className="shrink-0" />
           <div className="line-clamp-1 text-xs leading-[16.8px] -tracking-[0.48px] text-ellipsis text-neutral-50">
             {data.address}
           </div>

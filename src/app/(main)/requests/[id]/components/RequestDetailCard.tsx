@@ -2,7 +2,7 @@
 import { REQUEST_STATUS_CONFIG } from '@/data';
 import useCountdown from '@/hooks/useCountdown';
 import { TRequestDetailData } from '@/lib/types';
-import { formatDate, to12Hour } from '@/lib/utils';
+import { formatShortDate, to12Hour } from '@/lib/utils';
 import { Calendar, Clock } from 'iconsax-reactjs';
 import { useMemo } from 'react';
 
@@ -62,18 +62,18 @@ const RequestDetailCard = ({ data }: { data: TRequestDetailData }) => {
         <div className="bg-neutral-dark-500 absolute top-1/2 left-1/2 h-[26px] w-px -translate-x-1/2 -translate-y-1/2"></div>
         <div className="flex flex-col items-center gap-1">
           <div className="flex items-center gap-0.5 text-neutral-100">
-            <Calendar className="h-4 w-4 shrink-0" />
+            <Calendar size="16" className="shrink-0" />
             <div className="text-xs leading-[16.8px] font-medium tracking-[1.2px] uppercase">
               Date
             </div>
           </div>
           <div className="text-sm leading-[19.6px] font-semibold -tracking-[0.56px] text-neutral-500">
-            {formatDate(data.date)}
+            {formatShortDate(data.date)}
           </div>
         </div>
         <div className="flex flex-col items-center gap-1">
           <div className="flex items-center gap-0.5 text-neutral-100">
-            <Clock className="h-4 w-4 shrink-0" />
+            <Clock size="16" className="shrink-0" />
             <div className="text-xs leading-[16.8px] font-medium tracking-[1.2px] uppercase">
               Time
             </div>
